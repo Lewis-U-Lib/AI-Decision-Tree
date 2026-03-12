@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>References — Generative AI Video Production Decision Tree</title>
+  <meta name="description" content="Bibliography and references for the generative AI video production use-case decision tree for academic libraries.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    body{font-family:'Montserrat','Segoe UI',system-ui,sans-serif;min-height:100vh;background:linear-gradient(160deg,#220E16 0%,#1C0B12 35%,#14070D 100%);color:#FFFFFF;padding:32px 20px 48px;overflow-x:hidden}
+    .container{max-width:720px;margin:0 auto;position:relative;z-index:2}
+    .scanlines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);opacity:0.4}
+    .grid-bg{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;opacity:0.04;background-image:linear-gradient(rgba(232,196,70,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(232,196,70,0.3) 1px,transparent 1px);background-size:60px 60px}
+    @keyframes electric-slide{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+    .top-bar{position:fixed;top:0;left:0;right:0;height:3px;z-index:10;background:linear-gradient(90deg,#E8C446,#940731,#E8C446,#940731,#E8C446);background-size:200% 100%;animation:electric-slide 3s linear infinite;box-shadow:0 0 10px rgba(232,196,70,0.4),0 2px 20px rgba(232,196,70,0.15)}
+    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#E8C446;text-decoration:none;margin-bottom:28px;transition:all 0.2s ease;text-shadow:0 0 8px rgba(232,196,70,0.2)}
+    .back-link:hover{color:#FFE584;transform:translateX(-3px);text-shadow:0 0 14px rgba(232,196,70,0.4)}
+    .back-link:focus-visible{outline:3px solid #E8C446;outline-offset:2px}
+    .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:4px;color:#E8C446;text-transform:uppercase;background:rgba(232,196,70,0.06);padding:8px 20px;border-radius:20px;margin-bottom:20px;border:1px solid rgba(232,196,70,0.18);box-shadow:0 0 12px rgba(232,196,70,0.08);text-shadow:0 0 8px rgba(232,196,70,0.3)}
+    h1{font-size:30px;font-weight:900;margin:0 0 12px;background:linear-gradient(90deg,#BFA03A,#E8C446,#FFE584,#E8C446,#BFA03A);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite;filter:drop-shadow(0 0 12px rgba(232,196,70,0.25))}
+    .subtitle{font-size:15px;color:#D8CCC6;margin:0 0 8px;line-height:1.55;font-weight:400}
+    .accent-rule{width:80px;height:2px;margin:20px auto 32px;background:linear-gradient(90deg,transparent,#E8C446,transparent);border-radius:1px;box-shadow:0 0 8px rgba(232,196,70,0.3)}
+    .section-label{font-size:12px;font-weight:700;letter-spacing:3px;color:#E8C446;text-transform:uppercase;margin-bottom:16px;text-shadow:0 0 8px rgba(232,196,70,0.2)}
+    .ref-card{background:#2A1320;border:1px solid #4A1A2A;border-left:4px solid #E8C446;border-radius:10px;padding:20px 24px;margin-bottom:16px;transition:all 0.25s ease;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+    .ref-card:hover{border-left-color:#FFE584;box-shadow:0 0 20px rgba(232,196,70,0.12),0 4px 16px rgba(0,0,0,0.2);transform:translateX(3px)}
+    .ref-authors{font-size:15px;font-weight:600;color:#FFFFFF;margin-bottom:5px;line-height:1.45}
+    .ref-title{font-size:15px;color:#F0E8E4;margin-bottom:7px;line-height:1.55;font-weight:400}
+    .ref-source{font-size:13px;color:#D8CCC6;line-height:1.55;font-weight:400}
+    .ref-source em{font-style:italic}
+    .ref-doi a{font-size:13px;color:#E8C446;text-decoration:none;word-break:break-all;text-shadow:0 0 6px rgba(232,196,70,0.2)}
+    .ref-doi a:hover{color:#FFE584;text-decoration:underline;text-shadow:0 0 10px rgba(232,196,70,0.4)}
+    .ref-doi a:focus-visible{outline:3px solid #E8C446;outline-offset:2px}
+    .context-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.5px;padding:4px 12px;border-radius:12px;margin-top:10px}
+    .tag-question{background:rgba(224,64,96,0.10);color:#E04060}
+    .tag-framework{background:rgba(232,196,70,0.08);color:#E8C446}
+    .tag-policy{background:rgba(46,155,106,0.10);color:#2E9B6A}
+    .divider{border:none;border-top:1px solid #4A1A2A;margin:32px 0}
+    .cc-block{margin-top:32px;padding:24px;background:#2A1320;border-radius:12px;border:1px solid #4A1A2A;text-align:center;box-shadow:0 0 20px rgba(232,196,70,0.04)}
+    .cc-icon{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:2px solid #E8C446;color:#E8C446;font-size:11px;font-weight:800;flex-shrink:0;transition:all 0.3s ease;background:rgba(232,196,70,0.04);box-shadow:0 0 8px rgba(232,196,70,0.1)}
+    .cc-row:hover .cc-icon{background:rgba(232,196,70,0.12);border-color:#FFE584;color:#FFE584;box-shadow:0 0 16px rgba(232,196,70,0.3)}
+    .cc-link{color:#E8C446;text-decoration:none;font-weight:600;text-shadow:0 0 6px rgba(232,196,70,0.2)}
+    .cc-link:hover{text-decoration:underline;color:#FFE584;text-shadow:0 0 12px rgba(232,196,70,0.4)}
+    .footer{margin-top:40px;text-align:center;border-top:1px solid #4A1A2A;padding-top:20px}
+    .footer p{font-size:13px;color:#A8949C;line-height:1.8;font-weight:400}
+    .footer a{color:#E8C446;text-decoration:none;text-shadow:0 0 6px rgba(232,196,70,0.2)}
+    .footer a:hover{text-decoration:underline;color:#FFE584}
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#1C0B12}
+    ::-webkit-scrollbar-thumb{background:#4A1A2A;border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:#E8C446;box-shadow:0 0 6px #E8C446}
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="top-bar"></div>
+  <div class="container">
+
+    <a href="index.html" class="back-link">&larr; Back to Decision Tree</a>
+
+    <div style="text-align:center;margin-bottom:0">
+      <div class="badge">References &amp; Bibliography</div>
+      <h1>Sources &amp; Further Reading</h1>
+      <p class="subtitle">Research, policy statements, and professional frameworks referenced in the Use-Case Decision Tree for generative AI video production in academic libraries.</p>
+      <div class="accent-rule"></div>
+    </div>
+
+    <div class="section-label">Directly Cited in the Decision Tree</div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Sew, C., Sch&ouml;mbs, S., Kelly, R. M., &amp; Goncalves, J.</div>
+      <div class="ref-title">&ldquo;User Willingness to Engage with AI-Generated Influencer Content&rdquo;</div>
+      <div class="ref-source"><em>CHI EA &rsquo;25: Proceedings of the Extended Abstracts of the CHI Conference on Human Factors in Computing Systems.</em> ACM, 2025.</div>
+      <div class="ref-doi"><a href="https://doi.org/10.1145/3706599.3719916" target="_blank" rel="noopener">https://doi.org/10.1145/3706599.3719916</a></div>
+      <span class="context-tag tag-question">Referenced in: Q1 &mdash; Instructional Content Outcome</span>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Library Copyright Alliance (ALA, ARL)</div>
+      <div class="ref-title">&ldquo;Statement on Copyright and Generative Artificial Intelligence&rdquo;</div>
+      <div class="ref-source">Library Copyright Alliance, October 2025.</div>
+      <div class="ref-doi"><a href="https://www.librarycopyrightalliance.org/documents/principles/copyright-ai/statement-on-copyright-and-generative-artificial-intelligence/" target="_blank" rel="noopener">librarycopyrightalliance.org</a></div>
+      <span class="context-tag tag-question">Referenced in: Q3 &mdash; IP &amp; Copyright Concern Outcome</span>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Library Copyright Alliance (ALA, ARL)</div>
+      <div class="ref-title">&ldquo;Principles for Copyright and Artificial Intelligence&rdquo;</div>
+      <div class="ref-source">Library Copyright Alliance, July 2023.</div>
+      <div class="ref-doi"><a href="https://www.librarycopyrightalliance.org/documents/category/principles/copyright-ai/" target="_blank" rel="noopener">librarycopyrightalliance.org</a></div>
+      <span class="context-tag tag-policy">Foundational policy framework</span>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">Uncanny Valley &amp; Visual Style Research</div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Seymour, M., Yuan, L. I., Dennis, A., Riemer, K., et al.</div>
+      <div class="ref-title">&ldquo;Have We Crossed the Uncanny Valley? Understanding Affinity, Trustworthiness, and Preference for Realistic Digital Humans in Immersive Environments&rdquo;</div>
+      <div class="ref-source"><em>Journal of the Association for Information Systems</em>, 22(3), 9. 2021.</div>
+      <span class="context-tag tag-question">Informs: Q2 &mdash; Visual Style Assessment</span>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Stein, J.-P., Breves, P. L., &amp; Anders, N.</div>
+      <div class="ref-title">&ldquo;Parasocial Interactions with Real and Virtual Influencers: The Role of Perceived Similarity and Human-Likeness&rdquo;</div>
+      <div class="ref-source"><em>New Media &amp; Society</em>, 26(6), 3433&ndash;3453. 2024.</div>
+      <span class="context-tag tag-question">Informs: Q2 &mdash; Visual Style Assessment</span>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">AI Ethics, Transparency &amp; Disclosure</div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Shelby, R., Rismani, S., Henne, K., Moon, A., et al.</div>
+      <div class="ref-title">&ldquo;Sociotechnical Harms of Algorithmic Systems: Scoping a Taxonomy for Harm Reduction&rdquo;</div>
+      <div class="ref-source"><em>Proceedings of the 2023 AAAI/ACM Conference on AI, Ethics, and Society.</em> ACM, Montr&eacute;al, 723&ndash;741. 2023.</div>
+      <span class="context-tag tag-framework">Ethical framework for AI harm assessment</span>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Sew, C., Pareek, S., Govers, J., Sch&ouml;mbs, S., Kelly, R., &amp; Goncalves, J.</div>
+      <div class="ref-title">&ldquo;The Impact of Human-Likeness and Self-Disclosure on Message Acceptance in Virtual AI Influencers&rdquo;</div>
+      <div class="ref-source"><em>Proceedings of the 2025 ACM Designing Interactive Systems Conference</em>, 1165&ndash;1178. 2025.</div>
+      <div class="ref-doi"><a href="https://doi.org/10.1145/3715336.3735756" target="_blank" rel="noopener">https://doi.org/10.1145/3715336.3735756</a></div>
+      <span class="context-tag tag-question">Informs: Q4 &mdash; Deception Risk Assessment</span>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">Library Professional Frameworks</div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Association of College &amp; Research Libraries (ACRL)</div>
+      <div class="ref-title">&ldquo;AI Competencies for Academic Library Workers&rdquo;</div>
+      <div class="ref-source">Approved by the ACRL Board of Directors, October 2025.</div>
+      <div class="ref-doi"><a href="https://www.ala.org/acrl/standards/ai" target="_blank" rel="noopener">ala.org/acrl/standards/ai</a></div>
+      <span class="context-tag tag-policy">Informs: Training &amp; competency recommendations</span>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Association of Research Libraries (ARL)</div>
+      <div class="ref-title">&ldquo;Guiding Principles for Artificial Intelligence in Research Libraries&rdquo;</div>
+      <div class="ref-source">Association of Research Libraries, April 2024.</div>
+      <span class="context-tag tag-policy">Informs: Governance &amp; oversight structure</span>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">Additional Context &amp; Further Reading</div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Jin, S. V. &amp; Viswanathan, V.</div>
+      <div class="ref-title">&ldquo;Threatened and Empty Selves Following AI-Based Virtual Influencers: Comparison Between Followers and Non-Followers of Virtual Influencers in AI-Driven Digital Marketing&rdquo;</div>
+      <div class="ref-source"><em>AI &amp; Society</em>, 40, 117&ndash;131. 2025.</div>
+      <div class="ref-doi"><a href="https://doi.org/10.1007/s00146-023-01832-9" target="_blank" rel="noopener">https://doi.org/10.1007/s00146-023-01832-9</a></div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">Chowdhury, G. G. &amp; Chowdhury, S.</div>
+      <div class="ref-title"><em>AI and Information Access: Benefits, Challenges and Lessons</em></div>
+      <div class="ref-source">Facet Publishing / ALA Store, 2025.</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-authors">U.S. Copyright Office</div>
+      <div class="ref-title">&ldquo;Copyright and Artificial Intelligence, Part 3: Generative AI and the Copyright System&rdquo; (Pre-Publication)</div>
+      <div class="ref-source">U.S. Copyright Office, 2025.</div>
+    </div>
+
+    <div class="footer">
+      <p>
+        This bibliography supports the <a href="index.html">Use-Case Decision Tree</a> for generative AI video production in academic libraries.<br>
+        References are provided for transparency and scholarly context. Inclusion does not imply endorsement of all positions.<br>
+        <span style="color:#A8949C">Last updated: March 2026</span>
+      </p>
+    </div>
+
+    <div class="cc-block">
+      <div class="cc-row" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <span class="cc-icon" aria-hidden="true">CC</span>
+        <span class="cc-icon" aria-hidden="true">BY</span>
+        <span class="cc-icon" aria-hidden="true">NC</span>
+        <span class="cc-icon" aria-hidden="true">ND</span>
+      </div>
+      <p style="font-size:13px;color:#D8CCC6;line-height:1.7;font-weight:500">
+        This work is licensed under a
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" class="cc-link">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+      </p>
+      <p style="font-size:12px;color:#A8949C;margin-top:8px;line-height:1.5;font-weight:400">
+        You may share this work with attribution. No commercial use. No derivatives or adaptations.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
