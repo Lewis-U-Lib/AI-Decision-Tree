@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use-Case Decision Tree — Generative AI Video Production for Academic Libraries</title>
+  <meta name="description" content="Interactive decision tree for evaluating generative AI video production use cases in academic libraries. A policy-aligned assessment tool for library outreach and communications.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    #root { min-height: 100vh; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .option-btn { transition: all 0.2s ease; }
+    .option-btn:hover {
+      background: rgba(59,130,246,0.15) !important;
+      border-color: #3B82F6 !important;
+      transform: translateX(4px);
+    }
+    .nav-btn { transition: all 0.2s ease; }
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(59,130,246,0.08) !important;
+      border-color: #3B82F6 !important;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0F1724; }
+    ::-webkit-scrollbar-thumb { background: #2A3A52; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+  <script>
+    var e = React.createElement;
+    var useState = React.useState;
+    var useCallback = React.useCallback;
+
+    var COLORS = {
+      bg: "#0F1724",
+      card: "#1A2437",
+      accent: "#3B82F6",
+      accentGlow: "rgba(59,130,246,0.15)",
+      green: "#10B981",
+      greenGlow: "rgba(16,185,129,0.12)",
+      red: "#EF4444",
+      redGlow: "rgba(239,68,68,0.12)",
+      amber: "#F59E0B",
+      amberGlow: "rgba(245,158,11,0.12)",
+      text: "#E2E8F0",
+      textMuted: "#94A3B8",
+      textDim: "#64748B",
+      border: "#2A3A52",
+    };
+
+    var nodes = {
+      start: {
+        id: "start",
+        question: "What is the primary purpose of the proposed video?",
+        type: "question",
+        options: [
+          { label: "Library outreach, marketing, or promotional content", next: "style" },
+          { label: "Transitional segment within an instructional or informational video", next: "transitional_check" },
+          { label: "Direct instruction, curricular teaching, or pedagogical content", next: "prohibited_instructional" },
+          { label: "Unsure / doesn\u2019t clearly fit the above categories", next: "gray_area" },
+        ],
+      },
+      transitional_check: {
+        id: "transitional_check",
+        question: "Does the segment deliver in-depth educational information or pedagogical instruction?",
+        subtitle: "Bumpers, intros, transitions, and interstitials typically do not \u2014 but segments that teach, explain, or demonstrate content do.",
+        type: "question",
+        options: [
+          { label: "No \u2014 it\u2019s a bumper, intro, interstitial, or transition only", next: "style" },
+          { label: "Yes \u2014 it teaches, explains, or delivers instructional content", next: "prohibited_instructional" },
+        ],
+      },
+      style: {
+        id: "style",
+        question: "Does the proposed visual style avoid realistic human simulation?",
+        subtitle: "Examples of approved non-realistic styles: puppetry, claymation, stop-motion, stylized cartoons, surreal or abstract visuals, paper-craft, collage, or other clearly artificial aesthetics.",
+        type: "question",
+        options: [
+          { label: "Yes \u2014 uses a clearly non-realistic, stylized artistic medium", next: "ip_check" },
+          { label: "No \u2014 uses photorealistic humans, deepfake-style visuals, or hyperrealistic environments", next: "prohibited_style" },
+          { label: "Uncertain \u2014 not sure if the chosen style could risk uncanny-valley effects", next: "style_review" },
+        ],
+      },
+      ip_check: {
+        id: "ip_check",
+        question: "Is the content free of copyrighted characters, public figure likenesses, and unauthorized institutional trademarks?",
+        subtitle: "This includes third-party IP (e.g., Disney, Marvel, Nintendo), recognizable public figures, and your institution\u2019s own logos or marks if used without authorization.",
+        type: "question",
+        options: [
+          { label: "Yes \u2014 all AI-generated assets have been verified as original", next: "deception_check" },
+          { label: "No or unsure \u2014 potential IP concerns exist or originality hasn\u2019t been verified", next: "ip_remediation" },
+        ],
+      },
+      deception_check: {
+        id: "deception_check",
+        question: "Could the video reasonably be mistaken for recorded footage of real events or real people?",
+        subtitle: "Consider whether a typical viewer might believe the content depicts actual people, places, or events rather than AI-generated material.",
+        type: "question",
+        options: [
+          { label: "No \u2014 the content is clearly stylized and would not be mistaken for reality", next: "mission_check" },
+          { label: "Yes or possibly \u2014 some elements could be perceived as depicting real events or individuals", next: "deception_remediation" },
+        ],
+      },
+      mission_check: {
+        id: "mission_check",
+        question: "Does the content align with your institution\u2019s mission, values, and branding standards?",
+        subtitle: "Consider your library\u2019s and institution\u2019s stated mission, code of conduct, community values, and visual identity guidelines.",
+        type: "question",
+        options: [
+          { label: "Yes \u2014 fully consistent with institutional mission and values", next: "approved" },
+          { label: "Potential conflict or uncertainty about alignment", next: "gray_area" },
+        ],
+      },
+      approved: {
+        id: "approved", type: "outcome", status: "approved",
+        title: "APPROVED \u2014 Proceed to Production",
+        body: "This use case meets all recommended policy requirements for generative AI video production. You may proceed with production, ensuring human oversight at every stage, transparent AI disclosure on all distribution platforms, and thorough documentation of prompts, assets, and review decisions.",
+        actions: [
+          "Begin your production workflow with documented human review at each stage (script, assets, clips, final edit, pre-publication)",
+          "Apply a clear AI disclosure statement on every platform where the video is published",
+          "Complete a human review sign-off checklist before publication",
+          "Archive all production documentation \u2014 prompts, version histories, review comments, and final assets",
+        ],
+      },
+      prohibited_instructional: {
+        id: "prohibited_instructional", type: "outcome", status: "prohibited",
+        title: "PROHIBITED \u2014 Instructional Content",
+        body: "Generative AI video production is generally not recommended for direct instruction, pedagogical content, or curricular teaching material. Research suggests that AI-generated instructional content can undermine viewer trust and engender feelings of misinformation (Sew et al., 2025). This boundary helps maintain the credibility of your library\u2019s educational mission.",
+        actions: [
+          "Do not proceed with generative AI production for this use case",
+          "Consider traditional video production methods (recorded lectures, screen captures, live-action filming)",
+          "If you believe a narrow exception may apply, submit a written proposal to your oversight body for review",
+        ],
+      },
+      prohibited_style: {
+        id: "prohibited_style", type: "outcome", status: "prohibited",
+        title: "PROHIBITED \u2014 Realistic Human Simulation",
+        body: "Photorealistic human avatars, deepfake-style face or voice replication, and hyperrealistic environments designed to be indistinguishable from live footage are not recommended for library outreach content. These approaches risk uncanny-valley effects, viewer deception, and erosion of institutional trust.",
+        actions: [
+          "Revise the creative concept to use an approved non-realistic artistic medium",
+          "Recommended alternatives: puppetry, claymation, stop-motion, stylized cartoons, surreal or abstract visuals, paper-craft, collage",
+          "After revising the visual approach, restart this assessment from the beginning",
+        ],
+      },
+      gray_area: {
+        id: "gray_area", type: "outcome", status: "review",
+        title: "REVIEW REQUIRED \u2014 Consult Your Oversight Body",
+        body: "This use case does not clearly fall within the pre-approved or prohibited categories. Before proceeding, submit a brief written proposal describing the intended purpose, audience, and creative approach to your library\u2019s designated oversight body (e.g., a generative media committee, outreach review group, or library administration) for evaluation and written approval.",
+        actions: [
+          "Prepare a brief written proposal describing the intended use case, target audience, and creative approach",
+          "Submit the proposal to your designated oversight body for review",
+          "Await written approval before beginning any production work",
+          "Document the approval decision and any conditions in your project folder",
+        ],
+      },
+      style_review: {
+        id: "style_review", type: "outcome", status: "review",
+        title: "REVIEW REQUIRED \u2014 Style Uncertainty",
+        body: "When there is uncertainty about whether a proposed artistic medium risks realistic human replication or uncanny-valley effects, the production team should consult with colleagues and/or an oversight body before proceeding. A brief written rationale for the chosen style should be documented and retained.",
+        actions: [
+          "Document a brief written rationale explaining the proposed style and why it may or may not qualify as non-realistic",
+          "Consult with your team, colleagues, or oversight body to reach consensus",
+          "Obtain written confirmation that the style is acceptable before proceeding",
+          "After confirmation, restart this assessment to continue through the remaining questions",
+        ],
+      },
+      ip_remediation: {
+        id: "ip_remediation", type: "outcome", status: "review",
+        title: "ACTION REQUIRED \u2014 IP & Copyright Concern",
+        body: "All AI-generated assets should be verified for originality before use. Prompts and outputs must not replicate copyrighted characters, mimic identifiable public figures, or reproduce institutional trademarks without authorization. The ALA\u2019s guidance on generative AI and intellectual property is a helpful reference.",
+        actions: [
+          "Remove or replace any assets with potential IP concerns",
+          "Conduct an asset originality verification \u2014 use reverse image searches where feasible",
+          "Review your prompts to ensure they do not reference copyrighted or trademarked material",
+          "Document the verification process, then restart this assessment",
+        ],
+      },
+      deception_remediation: {
+        id: "deception_remediation", type: "outcome", status: "review",
+        title: "ACTION REQUIRED \u2014 Deception Risk",
+        body: "Content that could be mistaken for real footage or real individuals conflicts with transparency and ethical AI use principles. The visual approach should be revised to ensure viewers clearly understand the AI-generated nature of the content. Prominent AI disclosure alone is not sufficient \u2014 the visuals themselves should be unmistakably stylized.",
+        actions: [
+          "Revise the visual approach to be more clearly stylized and non-deceptive",
+          "Consider switching to a more distinctly non-realistic medium (puppetry, claymation, cartoon, etc.)",
+          "Ensure your AI disclosure statement will be prominently placed on all platforms",
+          "After revising, restart this assessment to verify the updated approach",
+        ],
+      },
+    };
+
+    var statusConfig = {
+      approved: { color: COLORS.green, glow: COLORS.greenGlow, icon: "\u2713", label: "APPROVED" },
+      prohibited: { color: COLORS.red, glow: COLORS.redGlow, icon: "\u2715", label: "PROHIBITED" },
+      review: { color: COLORS.amber, glow: COLORS.amberGlow, icon: "\u26A0", label: "REVIEW NEEDED" },
+    };
+
+    function DecisionTree() {
+      var historyState = useState(["start"]);
+      var history = historyState[0];
+      var setHistory = historyState[1];
+      var currentId = history[history.length - 1];
+      var current = nodes[currentId];
+      var stepNumber = history.length;
+
+      var handleOption = useCallback(function(nextId) {
+        setHistory(function(h) { return h.concat([nextId]); });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, []);
+
+      var handleBack = useCallback(function() {
+        setHistory(function(h) { return h.length > 1 ? h.slice(0, -1) : h; });
+      }, []);
+
+      var handleReset = useCallback(function() {
+        setHistory(["start"]);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, []);
+
+      // ── Progress dots ──
+      var progressDots = history.map(function(id, i) {
+        var node = nodes[id];
+        var isActive = i === history.length - 1;
+        var isOutcome = node.type === "outcome";
+        var dotColor = isOutcome ? statusConfig[node.status].color : isActive ? COLORS.accent : COLORS.textDim;
+        var connector = i > 0 ? e("div", { style: { width: 20, height: 2, background: isActive ? COLORS.accent : COLORS.border, borderRadius: 1 } }) : null;
+        var dot = e("div", { style: {
+          width: isActive ? 12 : 8, height: isActive ? 12 : 8,
+          borderRadius: "50%", background: dotColor,
+          boxShadow: isActive ? "0 0 12px " + dotColor : "none",
+          transition: "all 0.3s ease",
+        }});
+        return e("div", { key: i, style: { display: "flex", alignItems: "center", gap: 6 } }, connector, dot);
+      });
+
+      // ── Question card ──
+      var questionCard = null;
+      if (current.type === "question") {
+        var optionButtons = current.options.map(function(opt, i) {
+          return e("button", {
+            key: i, className: "option-btn",
+            onClick: function() { handleOption(opt.next); },
+            style: {
+              background: "transparent", border: "1px solid " + COLORS.border,
+              borderRadius: 10, padding: "14px 18px", color: COLORS.text,
+              fontSize: 14, fontFamily: "inherit", cursor: "pointer",
+              textAlign: "left", lineHeight: 1.45,
+              display: "flex", alignItems: "flex-start", gap: 12,
+            }
+          },
+            e("span", { style: {
+              minWidth: 24, height: 24, borderRadius: 6,
+              background: COLORS.accentGlow, border: "1px solid " + COLORS.accent + "40",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 11, fontWeight: 700, color: COLORS.accent,
+              flexShrink: 0, marginTop: 1,
+            }}, String.fromCharCode(65 + i)),
+            opt.label
+          );
+        });
+
+        questionCard = e("div", { style: {
+          background: COLORS.card, border: "1px solid " + COLORS.border,
+          borderRadius: 16, padding: "28px 28px 20px",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.3), 0 0 60px " + COLORS.accentGlow,
+          animation: "fadeIn 0.35s ease",
+        }},
+          e("div", { style: { fontSize: 11, fontWeight: 700, letterSpacing: 2, color: COLORS.accent, textTransform: "uppercase", marginBottom: 12 } }, "Question " + stepNumber + " of ~6"),
+          e("h2", { style: { fontSize: 19, fontWeight: 700, margin: "0 0 6px", lineHeight: 1.4, color: COLORS.text } }, current.question),
+          current.subtitle ? e("p", { style: { fontSize: 13, color: COLORS.textMuted, margin: "0 0 20px", lineHeight: 1.5, fontStyle: "italic" } }, current.subtitle) : null,
+          e("div", { style: { display: "flex", flexDirection: "column", gap: 8, marginTop: 16 } }, optionButtons)
+        );
+      }
+
+      // ── Outcome card ──
+      var outcomeCard = null;
+      if (current.type === "outcome") {
+        var cfg = statusConfig[current.status];
+        var titleText = current.title.split(" \u2014 ").length > 1 ? current.title.split(" \u2014 ")[1] : current.title;
+
+        var actionItems = current.actions.map(function(action, i) {
+          return e("div", { key: i, style: {
+            display: "flex", alignItems: "flex-start", gap: 10,
+            padding: "8px 12px", background: cfg.color + "08",
+            borderRadius: 8, fontSize: 13, lineHeight: 1.5, color: COLORS.text,
+          }},
+            e("span", { style: {
+              minWidth: 20, height: 20, borderRadius: "50%",
+              background: cfg.color + "20",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 10, fontWeight: 700, color: cfg.color,
+              flexShrink: 0, marginTop: 1,
+            }}, i + 1),
+            action
+          );
+        });
+
+        outcomeCard = e("div", { style: {
+          background: COLORS.card, border: "1px solid " + cfg.color + "40",
+          borderRadius: 16, overflow: "hidden",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.3), 0 0 40px " + cfg.glow,
+          animation: "fadeIn 0.35s ease",
+        }},
+          // Banner
+          e("div", { style: {
+            background: "linear-gradient(135deg, " + cfg.color + "18, " + cfg.color + "08)",
+            borderBottom: "1px solid " + cfg.color + "30",
+            padding: "16px 28px", display: "flex", alignItems: "center", gap: 12,
+          }},
+            e("div", { style: {
+              width: 36, height: 36, borderRadius: "50%",
+              background: cfg.color + "20", border: "2px solid " + cfg.color,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 18, fontWeight: 700, color: cfg.color,
+              boxShadow: "0 0 16px " + cfg.color + "40",
+            }}, cfg.icon),
+            e("div", null,
+              e("div", { style: { fontSize: 10, fontWeight: 700, letterSpacing: 2, color: cfg.color, textTransform: "uppercase" } }, cfg.label),
+              e("div", { style: { fontSize: 17, fontWeight: 700, color: COLORS.text, marginTop: 2 } }, titleText)
+            )
+          ),
+          // Body
+          e("div", { style: { padding: "20px 28px 24px" } },
+            e("p", { style: { fontSize: 14, lineHeight: 1.65, color: COLORS.textMuted, margin: "0 0 20px" } }, current.body),
+            e("div", { style: { fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: COLORS.textDim, textTransform: "uppercase", marginBottom: 10 } }, "Recommended Next Steps"),
+            e("div", { style: { display: "flex", flexDirection: "column", gap: 6 } }, actionItems)
+          )
+        );
+      }
+
+      // ── Breadcrumb ──
+      var breadcrumb = null;
+      if (history.length > 1) {
+        var crumbs = history.map(function(id, i) {
+          var node = nodes[id];
+          var isOutcome = node.type === "outcome";
+          var label = isOutcome ? statusConfig[node.status].label : "Q" + (i + 1);
+          var color = isOutcome ? statusConfig[node.status].color : COLORS.textMuted;
+          var arrow = i > 0 ? e("span", { style: { color: COLORS.textDim, fontSize: 11 } }, "\u2192") : null;
+          return e("div", { key: i, style: { display: "flex", alignItems: "center", gap: 4 } },
+            arrow,
+            e("span", { style: { fontSize: 11, fontWeight: 600, color: color, background: color + "15", padding: "2px 8px", borderRadius: 4 } }, label)
+          );
+        });
+        breadcrumb = e("div", { style: {
+          marginTop: 24, padding: "16px 20px",
+          background: COLORS.card + "cc", borderRadius: 10,
+          border: "1px solid " + COLORS.border + "80",
+        }},
+          e("div", { style: { fontSize: 10, fontWeight: 700, letterSpacing: 2, color: COLORS.textDim, textTransform: "uppercase", marginBottom: 8 } }, "Decision Path"),
+          e("div", { style: { display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" } }, crumbs)
+        );
+      }
+
+      // ── Legend ──
+      var legendItems = Object.keys(statusConfig).map(function(key) {
+        var cfg = statusConfig[key];
+        return e("div", { key: key, style: { display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: COLORS.textDim } },
+          e("div", { style: { width: 8, height: 8, borderRadius: "50%", background: cfg.color } }),
+          cfg.label
+        );
+      });
+
+      // ── Full render ──
+      return e("div", { style: {
+        minHeight: "100vh",
+        background: "linear-gradient(145deg, " + COLORS.bg + " 0%, #141E30 50%, #0F1724 100%)",
+        color: COLORS.text, padding: "32px 20px 48px",
+      }},
+        e("div", { style: { maxWidth: 720, margin: "0 auto" } },
+
+          // Header
+          e("div", { style: { textAlign: "center", marginBottom: 12 } },
+            e("div", { style: {
+              display: "inline-block", fontSize: 10, fontWeight: 700,
+              letterSpacing: 3, color: COLORS.accent, textTransform: "uppercase",
+              background: COLORS.accentGlow, padding: "6px 16px",
+              borderRadius: 20, marginBottom: 16,
+            }}, "Policy Assessment Tool"),
+            e("h1", { style: {
+              fontSize: 26, fontWeight: 800, margin: "0 0 6px", letterSpacing: -0.5,
+              background: "linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            }}, "Use-Case Decision Tree"),
+            e("p", { style: { fontSize: 13, color: COLORS.textDim, margin: "0 0 4px", lineHeight: 1.5 } }, "Generative AI Video Production for Academic Libraries"),
+            e("p", { style: { fontSize: 11, color: COLORS.textDim + "99", margin: 0, lineHeight: 1.4 } }, "Evaluate whether a proposed video project is approved, requires review, or falls outside recommended use.")
+          ),
+
+          // Progress
+          e("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 28, flexWrap: "wrap" } }, progressDots),
+
+          // Card
+          questionCard || outcomeCard,
+
+          // Navigation
+          e("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 20, gap: 12 } },
+            e("button", {
+              className: "nav-btn", onClick: handleBack, disabled: history.length <= 1,
+              style: {
+                background: "transparent", border: "1px solid " + COLORS.border,
+                borderRadius: 8, padding: "10px 20px",
+                color: history.length <= 1 ? COLORS.textDim : COLORS.textMuted,
+                fontSize: 13, fontFamily: "inherit", fontWeight: 600,
+                cursor: history.length <= 1 ? "default" : "pointer",
+                opacity: history.length <= 1 ? 0.4 : 1,
+              }
+            }, "\u2190 Back"),
+            e("button", {
+              className: "nav-btn", onClick: handleReset,
+              style: {
+                background: "transparent", border: "1px solid " + COLORS.border,
+                borderRadius: 8, padding: "10px 20px", color: COLORS.textMuted,
+                fontSize: 13, fontFamily: "inherit", fontWeight: 600, cursor: "pointer",
+              }
+            }, "Start Over \u21BA")
+          ),
+
+          // Breadcrumb
+          breadcrumb,
+
+          // Legend
+          e("div", { style: { marginTop: 20, display: "flex", justifyContent: "center", gap: 20, flexWrap: "wrap" } }, legendItems),
+
+          // Footer
+          e("div", { style: { marginTop: 40, textAlign: "center", borderTop: "1px solid " + COLORS.border, paddingTop: 20 } },
+            e("p", { style: { fontSize: 11, color: COLORS.textDim, lineHeight: 1.8 } },
+              "A policy assessment tool for academic libraries employing generative AI in video production.",
+              e("br"), "Based on recommended frameworks for ethical AI use, transparency, and institutional accountability.",
+              e("br"), e("span", { style: { color: COLORS.textDim + "88" } }, "Adapt to your institution\u2019s specific policies, values, and governance structures.")
+            )
+          )
+        )
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(e(DecisionTree));
+  </script>
+</body>
+</html>
